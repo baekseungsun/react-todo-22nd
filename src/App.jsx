@@ -254,3 +254,70 @@ export default function App() {
         [todos],
     );
     const total = todos.length;
+
+    // 첫 로드 시
+    useEffect(() => {
+        const raw = sessionStorage.getItem(dateKey);
+        if (raw) {
+            try {
+                const arr = JSON.parse(raw);
+                setByDate((prev) => ({...prev, [dateKey]: arr}));
+            } catch {
+                /* ignore */
+            }
+        } else {
+            setByDate((prev) => ({...prev, [dateKey]: []}));
+        }
+    }, []);
+
+    // 날짜 바뀜에 따라 롣드
+    useEffect(() => {
+        const raw = sessionStorage.getItem(dateKey);
+        if (raw) {
+            try {
+                const arr = JSON.parse(raw);
+                setByDate((prev) => ({...prev, [dateKey]: arr}));
+            } catch {
+                setByDate((prev) => ({...prev, [dateKey]: []}));
+            }
+        } else {
+            setByDate((prev) => ({...prev, [dateKey]: []}));
+        }
+    }, [dateKey]);
+
+
+    //투두 추가
+    const [text, setText] = useState('');
+    const addTodo = useCallback(() => {
+        const v = text.trim();
+        if (!v) return;
+        const next = [
+            ...todos,
+            { id: crypto.randomUUID?.() || String(Date.now()), text: v, done: false, pinned: false },
+        ];
+        setByDate((prev) => ({ ...prev, [dateKey]: next }));
+        persist(next);
+        setText('');
+    }, [text, todos, dateKey, persist]);
+
+    //제거
+    const deleteTodo = useCallback(
+        (id) => {
+            const next = todos.filter((t) => t.id !== id);
+            setByDate((prev) => ({ ...prev, [dateKey]: next }));
+            persist(next);
+        },
+        [todos, dateKey, persist],
+    );
+
+    //전체삭제
+    const clearAll = useCallback(() => {
+        setByDate((prev) => ({ ...prev, [dateKey]: [] }));
+        sessionStorage.removeItem(dateKey);
+    }, [dateKey]);
+
+
+
+}
+
+
