@@ -285,6 +285,17 @@ export default function App() {
         }
     }, [dateKey]);
 
+    // 현재 날짜 todos 저장, 비어 있다면 해당 날짜 key 삭제
+    const persist = useCallback(
+        (nextList) => {
+            if (!nextList || nextList.length === 0) {
+                sessionStorage.removeItem(dateKey);
+            } else {
+                sessionStorage.setItem(dateKey, JSON.stringify(nextList));
+            }
+        },
+        [dateKey],
+    );
 
     //투두 추가
     const [text, setText] = useState('');
@@ -310,6 +321,27 @@ export default function App() {
         [todos, dateKey, persist],
     );
 
+
+    //투두 done
+    const toggleDone = useCallback(
+        (id) => {
+            const next = todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
+            setByDate((prev) => ({ ...prev, [dateKey]: next }));
+            persist(next);
+        },
+        [todos, dateKey, persist],
+    );
+
+    //투두 pin
+    const togglePin = useCallback(
+        (id) => {
+            const next = todos.map((t) => (t.id === id ? { ...t, pinned: !t.pinned } : t));
+            setByDate((prev) => ({ ...prev, [dateKey]: next }));
+            persist(next);
+        },
+        [todos, dateKey, persist],
+    );
+
     //전체삭제
     const clearAll = useCallback(() => {
         setByDate((prev) => ({ ...prev, [dateKey]: [] }));
@@ -318,6 +350,115 @@ export default function App() {
 
 
 
+    // 날짜 조작
+    const changeDays = useCallback((offset) => {
+        setCurrent((prev) => {
+            const d = new Date(prev);
+            d.setDate(d.getDate() + offset);
+            return d;
+        });
+    }, []);
+    const goToday = useCallback(() => setCurrent(new Date()), []);
+    const onPickDate = useCallback((e) => {
+        if (!e.target.value) return;
+        const [y, m, d] = e.target.value.split('-').map(Number);
+        setCurrent(new Date(y, m - 1, d));
+    }, []);
+
+    // 메뉴탭
+    const drawerRef = useRef(null);
+    const menuBtnRef = useRef(null);
+    useEffect(() => {
+        const onClick = (e) => {
+            //닫혀 있다면 아무 액션 없이 return
+            if (!open) return;
+            if (drawerRef.current?.contains(e.target)) return;
+            if (menuBtnRef.current?.contains(e.target)) return;
+            setOpen(false);
+        };
+        const onKey = (e) => {
+            if (open && e.key === 'Escape') setOpen(false);
+        };
+        document.addEventListener('click', onClick);
+        document.addEventListener('keydown', onKey);
+        return () => {
+            document.removeEventListener('click', onClick);
+            document.removeEventListener('keydown', onKey);
+        };
+    }, [open]);
+
+    const fmt = useMemo(() => ({ year: 'numeric', month: 'long', day: 'numeric' }), []);
+    const dateLabel = useMemo(() => current.toLocaleDateString(undefined, fmt), [current, fmt]);
+
+    return (
+        <>
+            <GlobalStyle />
+
+            <Header>
+                <MenuBtn ref={menuBtnRef} onClick={() => setOpen(true)}>
+                    <MenuIcon />
+                </MenuBtn>
+                <Title>To Do</Title>
+            </Header>
+
+            <Drawer open={open}>
+                <DrawerInner ref={drawerRef}>
+                    <CloseBtn onClick={() => setOpen(false)}>x</CloseBtn>
+
+                    <DrawerOptions>
+                        <WeekBtn onClick={() => changeDays(-7)}>Last Week</WeekBtn>
+                        <WeekBtn onClick={() => changeDays(7)}>Next Week</WeekBtn>
+                        <input className="menuDatePicker" type="date" onChange={onPickDate} />
+                    </DrawerOptions>
+                </DrawerInner>
+            </Drawer>
+
+            <DateRow>
+                <DateBtn onClick={() => changeDays(-1)}>◀</DateBtn>
+                <TodayBtn onClick={goToday}>{dateLabel}</TodayBtn>
+                <DateBtn onClick={() => changeDays(1)}>▶</DateBtn>
+            </DateRow>
+
+            <InputRow>
+                <TextInput
+                    placeholder="What is there to do?"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') addTodo();
+                    }}
+                />
+                <AddBtn onClick={addTodo}>Add</AddBtn>
+            </InputRow>
+
+            <ListWrap>
+                <TopRow>
+                    <ClearBtn onClick={clearAll}>Clear all</ClearBtn>
+                    <NumToDos>To-do: {total}</NumToDos>
+                </TopRow>
+
+                <UL>
+                    {sorted.map((t) => (
+                        <LI key={t.id} className={t.pinned ? 'pinned' : ''} data-id={t.id}>
+                            <DoneBtn active={t.done} onClick={() => toggleDone(t.id)}>
+                                {t.done ? 'Undone' : 'Done'}
+                            </DoneBtn>
+                            <Txt className={t.done ? 'done' : ''}>{t.text}</Txt>
+                            <PinBtn outline active={t.pinned} onClick={() => togglePin(t.id)}>
+                                {t.pinned ? 'Unpin' : 'Pin'}
+                            </PinBtn>
+                            <SmallBtn solid onClick={() => deleteTodo(t.id)}>
+                                Delete
+                            </SmallBtn>
+                        </LI>
+                    ))}
+                </UL>
+            </ListWrap>
+        </>
+    );
 }
+
+
+
 
 

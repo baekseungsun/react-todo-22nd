@@ -1,0 +1,31 @@
+{
+  "name": "assignment2",
+  "version": "1.0.0",
+  "description": "안녕하세요 🙌🏻 22기 프론트엔드 운영진 **권동욱**입니다.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "vite": "^7.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baekseungsun/react-todo-22nd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/baekseungsun/react-todo-22nd/issues"
+  },
+  "homepage": "https://github.com/baekseungsun/react-todo-22nd#readme"
+}

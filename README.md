@@ -1,4 +1,5 @@
 # 2주차 과제: React Todo
+
 # 서론
 
 안녕하세요 🙌🏻 22기 프론트엔드 운영진 **권동욱**입니다.
@@ -25,7 +26,7 @@
 - VSCode, Prettier를 이용하여 개발환경을 관리합니다.
 - React의 기초를 이해합니다.
 - React를 통한 어플리케이션 상태 관리 방법을 이해합니다.
-- React Hooks에 대한 기초를 이해합니다. 
+- React Hooks에 대한 기초를 이해합니다.
 - Vite를 통한 React 프로젝트 개발환경 구축을 익힙니다.
 - Styled-Components를 통한 CSS-in-JS 및 CSS Preprocessor의 사용법을 익힙니다.
 
@@ -40,14 +41,15 @@
 - React 컴포넌트 생명주기에 대해서 설명해주세요.
 
 ## 필수 요건
+
 - 1주차 미션의 결과물을 그대로 React로 구현합니다. (‼️ todo / done 개수 잊지 마세요 ‼️)
 - Styled-Component를 사용합니다.
-- React Hooks만을 사용해 상태를 관리합니다.(전역 상태관리 라이브러리 사용 XX) 
+- React Hooks만을 사용해 상태를 관리합니다.(전역 상태관리 라이브러리 사용 XX)
 - Vite를 활용하여 React 프로젝트 환경 구축을 진행합니다
 
 ## 선택 요건
 
-- 기존 Todo-list에 여러분들이 추가하고 싶은 기능과 디자인을 자유롭게 추가해보세요. 
+- 기존 Todo-list에 여러분들이 추가하고 싶은 기능과 디자인을 자유롭게 추가해보세요.
 - TypeScript를 활용하여 프로젝트를 진행해보세요.
 
 ## 로컬 실행방법
@@ -64,6 +66,6 @@
 - [useState, useEffect hooks](https://velog.io/@velopert/react-hooks#1-usestate)
 - [styled-component](https://styled-components.com/docs/basics#getting-started) 
 - [create react app (CRA) 지원종료 공식문서](https://react.dev/blog/2025/02/14/sunsetting-create-react-app) 
-- [create react app 지원종료관련 okky 커뮤니티 게시글](https://okky.kr/articles/1527414) 
-- [cra 대신에 vite로 React 프로젝트 시작하기](https://www.daleseo.com/vite-react/) 
+- [create react app 지원종료관련 okky 커뮤니티 게시글](https://okky.kr/articles/1527414)
+- [cra 대신에 vite로 React 프로젝트 시작하기](https://www.daleseo.com/vite-react/)
 - [Vite 실무 적용기 - 설명 + 프로젝트 설정](https://blog.hectodata.co.kr/bonjour-vite/)
