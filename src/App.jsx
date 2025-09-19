@@ -228,3 +228,29 @@ const PinBtn = styled(SmallBtn)`
   background: ${(p) => (p.active ? 'crimson' : 'none')};
   color: ${(p) => (p.active ? 'white' : '#0f172a')};
 `;
+
+
+
+//Functions
+const toDateKey = (d) => new Date(d).toLocaleDateString('en-CA'); // YYYY-MM-DD in local time
+
+export default function App() {
+    // 날짜와 메뉴 상태
+    const [current, setCurrent] = useState(() => new Date());
+    const [open, setOpen] = useState(false);
+
+    // 날짜별 todos 저장용
+    const [byDate, setByDate] = useState(() => {
+        return {};
+    });
+
+    // 현재 날짜의 todos
+    const dateKey = toDateKey(current);
+    const todos = byDate[dateKey] ?? [];
+
+    // pin기준 정렬
+    const sorted = useMemo(
+        () => [...todos].sort((a, b) => Number(b.pinned) - Number(a.pinned)),
+        [todos],
+    );
+    const total = todos.length;
